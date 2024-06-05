@@ -41,10 +41,6 @@ class StoryController extends Controller {
         }
     }
 
-    public function indexByUsername(Request $request) {
-
-    }
-
     public function indexByCategoryId(Request $request) {
         try {
             $categoryId = $request->route("id");
