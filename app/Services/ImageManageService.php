@@ -34,7 +34,7 @@ class ImageManageService {
 
     public function delete(string $imageName, ImageTypeEnum $imageType) {
         try {
-            Storage::disk('public')->delete();
+            Storage::disk('public')->delete('images/' . $imageType->value . '/' . $imageName);
         } catch(\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
             return null;
