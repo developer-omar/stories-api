@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -108,8 +107,8 @@ Route::middleware(['api', 'jwt.auth'])->group(function () {
     });
 });
 
-Route::fallback(function (\App\Services\ApiResponseService $apiResponse) {
-    return $apiResponse->responseHttp404();
+Route::fallback(function (\App\Services\JsonResponseService $apiResponse) {
+    return $apiResponse->http404();
 });
 
 

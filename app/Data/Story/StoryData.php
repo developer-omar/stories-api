@@ -1,7 +1,11 @@
 <?php
 
-namespace App\Data;
+namespace App\Data\Story;
 
+use App\Data\AudienceType\AudienceTypeData;
+use App\Data\Category\CategoryData;
+use App\Data\Chapter\ChapterData;
+use App\Data\CopyrightType\CopyrightTypeData;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\WithCast;

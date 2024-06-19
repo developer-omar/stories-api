@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Data\StoryIndexResponseData;
-use App\Data\StoryRequestData;
+use App\Data\Story\StoreStoryResponseData;
+use App\Data\Story\StoryIndexResponseData;
+use App\Data\Story\StoryRequestData;
 use App\Enums\ImageTypeEnum;
 use App\Enums\UserStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoryRequest;
 use App\Repositories\StoryReporsitory;
-use App\Services\ApiResponseService;
-use App\Services\LoggerService;
+use App\Services\JsonResponseService;
 use App\Services\ImageManageService;
+use App\Services\LoggerService;
 use Illuminate\Http\Request;
 
 class StoryController extends Controller {
 
     public function __construct(
-        public ApiResponseService $apiResponse,
-        public LoggerService      $logger,
-        public StoryReporsitory   $storyReporsitory,
+        public JsonResponseService $jsonResponseService,
+        public LoggerService       $logger,
+        public StoryReporsitory    $storyReporsitory,
     ) {
         //
     }
@@ -30,14 +31,14 @@ class StoryController extends Controller {
             $userId = $request->route("id");
             $stories = $this->storyReporsitory->getAllByUser($userId, UserStatusEnum::NOT_LOGGED_IN);
             if (is_null($stories))
-                return $this->apiResponse->responseHttp404();
+                return $this->jsonResponseService->http404();
             $responseData = StoryIndexResponseData::from([
                 'stories' => $stories->toArray()
             ]);
-            return $this->apiResponse->responseHttp200($responseData);
+            return $this->jsonResponseService->http200($responseData);
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->responseHttp500();
+            return $this->jsonResponseService->http500();
         }
     }
 
@@ -46,14 +47,14 @@ class StoryController extends Controller {
             $categoryId = $request->route("id");
             $stories = $this->storyReporsitory->getAllByCategory($categoryId);
             if (is_null($stories))
-                return $this->apiResponse->responseHttp404();
+                return $this->jsonResponseService->http404();
             $responseData = StoryIndexResponseData::from([
                 'stories' => $stories->toArray()
             ]);
-            return $this->apiResponse->responseHttp200($responseData);
+            return $this->jsonResponseService->http200($responseData);
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->responseHttp500();
+            return $this->jsonResponseService->http500();
         }
     }
 
@@ -63,22 +64,26 @@ class StoryController extends Controller {
     public function store(StoryRequest $request, ImageManageService $imageManageService) {
         $requestData = StoryRequestData::from($request);
         $user = auth()->user();
-        //manage of image file
+        //managing of image file
         try {
             $imageName = $imageManageService->store($requestData->cover_image, ImageTypeEnum::STORY);
             if(is_null($imageName))
-                return $this->apiResponse->responseHttp422();
+                return $this->jsonResponseService->http422();
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->responseHttp500();
+            return $this->jsonResponseService->http500();
         }
-        //manage of store in database
+        //managing of store in database
         try {
             $story = $this->storyReporsitory->save($requestData, $imageName, $user->id);
-            return $story;
+            $responseData = StoreStoryResponseData::from([
+                "story" => $story
+            ]);
+            return $this->jsonResponseService->http200($responseData);
+            //return $story;
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->responseHttp422();
+            return $this->jsonResponseService->http422();
         }
     }
 
@@ -90,7 +95,7 @@ class StoryController extends Controller {
 
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->responseHttp500();
+            return $this->jsonResponseService->http500();
         }
     }
 

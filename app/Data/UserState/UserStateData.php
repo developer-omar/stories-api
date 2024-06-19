@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Data;
+namespace App\Data\UserState;
 
 use Spatie\LaravelData\Data;
 
-class UserGenderData extends Data {
+class UserStateData extends Data {
     public function __construct(
         public int $id,
-        public string $name,
+        public string $name
     ) {
         //
     }
 
-    /*public static function fromModel(int $id, string $name) {
+    /*public static function fromModel($id, $name) {
         return new self(
             $id,
-            $name,
+            $name
         );
     }*/
 }

@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Data\AudienceTypeData;
-use App\Data\AudienceTypeIndexResponseData;
+use App\Data\AudienceType\AudienceTypeIndexResponseData;
 use App\Http\Controllers\Controller;
 use App\Repositories\AudienceTypeRepository;
-use App\Services\ApiResponseService;
+use App\Services\JsonResponseService;
 use App\Services\LoggerService;
-use Illuminate\Http\Request;
 
 class AudienceTypeController extends Controller {
     public function __construct(
-        public ApiResponseService        $apiResponse,
+        public JsonResponseService       $jsonResponseService,
         public LoggerService             $logger,
         protected AudienceTypeRepository $audienceTypeRepository,
     ) {
@@ -25,10 +23,10 @@ class AudienceTypeController extends Controller {
             $responseData = AudienceTypeIndexResponseData::from([
                 "audience_types" => $audienceTypes->toArray()
             ]);
-            return $this->apiResponse->responseHttp200($responseData);
+            return $this->jsonResponseService->http200($responseData);
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->responseHttp500();
+            return $this->jsonResponseService->http500();
         }
     }
 }

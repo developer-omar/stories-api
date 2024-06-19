@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Data;
+namespace App\Data\Story;
 
 use Illuminate\Http\UploadedFile;
-use phpDocumentor\Reflection\Types\Nullable;
-use Spatie\LaravelData\Attributes\MapInputName;
-use Spatie\LaravelData\Attributes\WithCast;
-use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
 
+// A DTO for save and update a story
 class StoryRequestData extends Data
 {
     public function __construct(

@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Data;
+namespace App\Data\User;
 
-use App\Models\UserGender;
+use App\Data\UserGender\UserGenderData;
+use App\Data\UserState\UserStateData;
 use App\Models\UserProfile;
-use App\Models\UserState;
-use PhpOption\Option;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Optional;
 
 class UserData extends Data {
     public function __construct(

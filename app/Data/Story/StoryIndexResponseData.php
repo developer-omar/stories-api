@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data;
+namespace App\Data\Story;
 
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;

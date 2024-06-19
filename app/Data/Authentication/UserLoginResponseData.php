@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Data;
+namespace App\Data\Authentication;
 
-use App\Models\User;
+use App\Data\User\UserData;
 use Spatie\LaravelData\Data;
 
 class UserLoginResponseData extends Data {

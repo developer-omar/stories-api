@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Data\StoryRequestData;
+use App\Data\Story\StoryRequestData;
 use App\Enums\DeletedStateEnum;
 use App\Enums\PublicationStatusEnum;
 use App\Enums\UserStatusEnum;
@@ -11,7 +11,6 @@ use App\Models\Story;
 use App\Models\User;
 use App\Services\LoggerService;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class StoryReporsitory {
@@ -51,7 +50,7 @@ class StoryReporsitory {
             ])
             ->with([
                 "category" => function($query) {
-                    $query->select('id', 'name');
+                    $query->select('id', 'name', 'slug');
                 },
                 'audienceType' => function($query) {
                     $query->select('id', 'audience', 'age_range');
@@ -70,20 +69,30 @@ class StoryReporsitory {
     public function getById($id) {
         if (!is_int($id))
             return null;
-        $story = Story::with([
-            "category" => function($query) {
-                $query->select('id', 'name');
-            },
-            'audienceType' => function($query) {
-                $query->select('id', 'audience', 'age_range');
-            },
-            "copyrightType" => function($query) {
-                $query->select("id", "copyright");
-            },
-            "user" => function($query) {
-                $query->select("id", "username", "name", "last_name");
-            },
-        ])->find($id);
+        $story = Story::where('deleted_state', DeletedStateEnum::NOT_DELETED->value)
+            ->with([
+                "category" => function($query) {
+                    $query->select('id', 'name', 'slug');
+                },
+                'audienceType' => function($query) {
+                    $query->select('id', 'audience', 'age_range');
+                },
+                "copyrightType" => function($query) {
+                    $query->select("id", "copyright");
+                },
+                "user" => function($query) {
+                    $query->select("id", "username", "name", "last_name");
+                },
+            ])
+            ->withCount([
+                'chapters' => function(Builder $query) /*use ($userStatus)*/ {
+                    $query->where('deleted_state', DeletedStateEnum::NOT_DELETED->value);
+                    /*if (!$userStatus->value)
+                        $query->where('publication_status', PublicationStatusEnum::PUBLISHED->value);*/
+                }
+            ])
+            ->find($id);
+        return $story;
     }
 
     public function save(StoryRequestData $requestData, string $coverName, int $userId) {
@@ -100,7 +109,7 @@ class StoryReporsitory {
             "copyright_type_id" => $requestData->copyright_type,
             "user_id" => $userId
         ]);
-        //$story = $story->get
+        $story = $this->getById($story->id);
         return $story;
     }
 }

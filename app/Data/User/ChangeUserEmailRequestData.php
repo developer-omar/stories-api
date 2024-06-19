@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Data;
+namespace App\Data\User;
 
 use Spatie\LaravelData\Data;
 
-class ChangeUsernameRequestData extends Data
+class ChangeUserEmailRequestData extends Data
 {
     public function __construct(
-        public string $new_username,
+        public string $new_email,
         public string $password
     ) {}
 }

@@ -2,25 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Data\UserData;
-use App\Data\UserLoginRequestData;
-use App\Data\UserLoginResponseData;
+use App\Data\Authentication\UserLoginRequestData;
+use App\Data\Authentication\UserLoginResponseData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginUserRequest;
 use App\Repositories\UserRepository;
-use Illuminate\Http\Request;
-
-use App\Models\User;
-use App\Services\ApiResponseService;
+use App\Services\JsonResponseService;
 use App\Services\LoggerService;
+use Illuminate\Http\Request;
 
 class AuthenticationController extends Controller {
     public $data;
 
     public function __construct(
-        public ApiResponseService $apiResponse,
-        public LoggerService      $logger,
-        protected UserRepository  $userRepository,
+        public JsonResponseService $jsonResponseService,
+        public LoggerService       $logger,
+        protected UserRepository   $userRepository,
     ) {
         $this->data = new \stdClass();
     }
@@ -33,9 +30,8 @@ class AuthenticationController extends Controller {
                 ["email" => $requestData->email_username],
                 ["username" => $requestData->email_username]
             );
-            //dd($user->toArray());
             if (is_null($user))
-                return $this->apiResponse->responseHttp401();
+                return $this->jsonResponseService->http401();
             $token = auth('api')->attempt([
                 'email' => $user->email,
                 'password' => $requestData->password,
@@ -47,20 +43,20 @@ class AuthenticationController extends Controller {
                 "expires_in" => auth()->factory()->getTTL() * 60,
                 "user" => $user->toArray(),
             ]);
-            return $this->apiResponse->responseHttp200($responseData);
+            return $this->jsonResponseService->http200($responseData);
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->responseHttp500();
+            return $this->jsonResponseService->http500();
         }
     }
 
     public function logout(Request $request) {
         try {
             auth()->logout();
-            return $this->apiResponse->responseHttp200();
+            return $this->jsonResponseService->http200();
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->responseHttp500();
+            return $this->jsonResponseService->http500();
         }
     }
 }

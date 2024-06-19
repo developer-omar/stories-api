@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data;
+namespace App\Data\Category;
 
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -15,10 +15,10 @@ class CategoryIndexResponseData extends Data {
         //
     }
 
-    public static function fromCollection(Collection $categories) {
+    /*public static function fromCollection(Collection $categories) {
         $dataArray = [];
         foreach ($categories as $category)
             $dataArray[] = CategoryData::from($category);
         return new self(CategoryData::collection($dataArray));
-    }
+    }*/
 }

@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Data\ChangeUserEmailRequestData;
-use App\Data\ChangeUserPasswordRequestData;
-use App\Data\ChangeUsernameRequestData;
-use App\Data\StoreUserRequestData;
-use App\Data\UpdateUserRequestData;
+use App\Data\User\ChangeUserEmailRequestData;
+use App\Data\User\ChangeUsernameRequestData;
+use App\Data\User\ChangeUserPasswordRequestData;
+use App\Data\User\StoreUserRequestData;
+use App\Data\User\UpdateUserRequestData;
 use App\Models\User;
 use App\Models\UserGender;
 use App\Services\LoggerService;

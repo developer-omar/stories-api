@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Data\GenderIndexResponseData;
+use App\Data\UserGender\GenderIndexResponseData;
 use App\Http\Controllers\Controller;
 use App\Repositories\GenderRepository;
-use App\Services\ApiResponseService;
+use App\Services\JsonResponseService;
 use App\Services\LoggerService;
-use Illuminate\Http\Request;
 
 class GenderController extends Controller {
     public function __construct(
-        public ApiResponseService  $apiResponse,
+        public JsonResponseService $apiResponse,
         public LoggerService       $logger,
         protected GenderRepository $genderRepository,
     ) {
@@ -24,11 +23,13 @@ class GenderController extends Controller {
     public function index() {
         try {
             $genders = $this->genderRepository->getAll();
-            $responseData = GenderIndexResponseData::from($genders);
-            return $this->apiResponse->responseHttp200($responseData);
+            $responseData = GenderIndexResponseData::from([
+                "genders" => $genders
+            ]);
+            return $this->apiResponse->http200($responseData);
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->responseHttp500();
+            return $this->apiResponse->http500();
         }
     }
 }

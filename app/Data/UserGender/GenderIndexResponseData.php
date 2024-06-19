@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data;
+namespace App\Data\UserGender;
 
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -14,10 +14,10 @@ class GenderIndexResponseData extends Data
         public DataCollection $genders
     ) {}
 
-    public static function fromCollection(Collection $genders) {
+    /*public static function fromCollection(Collection $genders) {
         $dataArray = [];
         foreach ($genders as $gender)
             $dataArray[] = UserGenderData::from($gender);
         return new self(UserGenderData::collection($dataArray));
-    }
+    }*/
 }

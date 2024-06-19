@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data;
+namespace App\Data\Chapter;
 
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Casts\DateTimeInterfaceCast;

@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\Password;
-use App\Services\ApiResponseService;
+use App\Services\JsonResponseService;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -11,7 +11,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 class LoginUserRequest extends FormRequest {
 
     public function __construct(
-        protected ApiResponseService $apiResponse,
+        protected JsonResponseService $apiResponse,
     ) {
         //
     }
@@ -44,7 +44,7 @@ class LoginUserRequest extends FormRequest {
 
     protected function failedValidation(Validator $validator) {
         throw new HttpResponseException(
-            $this->apiResponse->responseHttp422($validator->errors())
+            $this->apiResponse->http422($validator->errors())
         );
     }
 }

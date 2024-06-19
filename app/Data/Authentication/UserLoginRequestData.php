@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Data;
+namespace App\Data\Authentication;
 
-use Spatie\LaravelData\Attributes\Validation\Email;
 use Spatie\LaravelData\Data;
 
 class UserLoginRequestData extends Data {
