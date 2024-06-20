@@ -54,16 +54,22 @@ Route::get(
 
 Route::prefix("stories")->group(function () {
     Route::get(
-        "user/{id}",
+        "user/{userId}",
         [\App\Http\Controllers\Api\StoryController::class, "indexByUserId"]
-    )   ->where('id', '[0-9]+')
+    )   ->where('userId', '[0-9]+')
         ->name("story.index-by-user-id");
 
     Route::get(
-        "category/{id}",
+        "category/{categoryId}",
         [\App\Http\Controllers\Api\StoryController::class, "indexByCategoryId"]
-    )   ->where('id', '[0-9]+')
+    )   ->where('categoryId', '[0-9]+')
         ->name("story.index-by-category-id");
+
+    Route::get(
+        "{id}",
+        [\App\Http\Controllers\Api\StoryController::class, "show"]
+    )   ->where('id', '[0-9]+')
+        ->name("story.show");
 });
 
 
@@ -104,6 +110,18 @@ Route::middleware(['api', 'jwt.auth'])->group(function () {
             "",
             [\App\Http\Controllers\Api\StoryController::class, "store"]
         )->name("story.store");
+
+        Route::put(
+            "{id}",
+            [\App\Http\Controllers\Api\StoryController::class, "update"]
+        )   ->where('id', '[0-9]+')
+            ->name("story.update");
+
+        Route::delete(
+            "{id}",
+            [\App\Http\Controllers\Api\StoryController::class, "destroy"]
+        )   ->where('id', '[0-9]+')
+            ->name("story.destroy");
     });
 });
 

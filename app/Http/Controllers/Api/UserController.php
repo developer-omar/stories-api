@@ -22,7 +22,7 @@ class UserController extends Controller {
     //public $user;
 
     public function __construct(
-        public JsonResponseService  $apiResponse,
+        public JsonResponseService  $jsonResponseService,
         public LoggerService        $logger,
         public Authenticatable|null $user,
         protected UserRepository    $userRepository,
@@ -45,10 +45,10 @@ class UserController extends Controller {
             $requestData = StoreUserRequestData::from($request);
             $user = $this->userRepository->save($requestData);
             $responseData = StoreUserResponseData::from($user->toArray());
-            return $this->apiResponse->http200($responseData);
+            return $this->jsonResponseService->http200($responseData);
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->http500();
+            return $this->jsonResponseService->http500();
         }
     }
 
@@ -60,14 +60,14 @@ class UserController extends Controller {
             $userId = (int)$request->route('id');
             $user = $this->userRepository->getById($userId);
             if (is_null($user))
-                return $this->apiResponse->http404();
+                return $this->jsonResponseService->http404();
             $responseData = ShowUserResponseData::from([
                 "user" => $user->toArray()
             ]);
-            return $this->apiResponse->http200($responseData);
+            return $this->jsonResponseService->http200($responseData);
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->http500();
+            return $this->jsonResponseService->http500();
         }
     }
 
@@ -79,14 +79,14 @@ class UserController extends Controller {
             $requestData = UpdateUserRequestData::from($request);
             $user = $this->userRepository->update($requestData, $this->user->id);
             if (is_null($user))
-                return $this->apiResponse->http404();
+                return $this->jsonResponseService->http404();
             $responseData = UpdateUserResponseData::from([
                 "user" => $user->toArray()
             ]);
-            return $this->apiResponse->http200($responseData);
+            return $this->jsonResponseService->http200($responseData);
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->http500();
+            return $this->jsonResponseService->http500();
         }
     }
 
@@ -102,12 +102,12 @@ class UserController extends Controller {
             $requestData = ChangeUserEmailRequestData::from($request);
             $checkPassword = $this->userRepository->checkPassword($requestData->password, $this->user->id);
             if (!$checkPassword)
-                return $this->apiResponse->http400($this->getData());
+                return $this->jsonResponseService->http400($this->getData());
             $this->userRepository->updateEmail($requestData, $this->user->id);
-            return $this->apiResponse->http200();
+            return $this->jsonResponseService->http200();
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->http500();
+            return $this->jsonResponseService->http500();
         }
     }
 
@@ -116,12 +116,12 @@ class UserController extends Controller {
             $requestData = ChangeUsernameRequestData::from($request);
             $checkPassword = $this->userRepository->checkPassword($requestData->password, $this->user->id);
             if (!$checkPassword)
-                return $this->apiResponse->http400($this->getData());
+                return $this->jsonResponseService->http400($this->getData());
             $this->userRepository->updateUsername($requestData, $this->user->id);
-            return $this->apiResponse->http200();
+            return $this->jsonResponseService->http200();
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->http500();
+            return $this->jsonResponseService->http500();
         }
     }
 
@@ -130,12 +130,12 @@ class UserController extends Controller {
             $requestData = ChangeUserPasswordRequestData::from($request);
             $checkPassword = $this->userRepository->checkPassword($requestData->current_password, $this->user->id);
             if (!$checkPassword)
-                return $this->apiResponse->http400($this->getData());
+                return $this->jsonResponseService->http400($this->getData());
             $this->userRepository->updatePassword($requestData, $this->user->id);
-            return $this->apiResponse->http200();
+            return $this->jsonResponseService->http200();
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->http500();
+            return $this->jsonResponseService->http500();
         }
     }
 

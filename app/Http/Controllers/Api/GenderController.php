@@ -10,7 +10,7 @@ use App\Services\LoggerService;
 
 class GenderController extends Controller {
     public function __construct(
-        public JsonResponseService $apiResponse,
+        public JsonResponseService $jsonResponseService,
         public LoggerService       $logger,
         protected GenderRepository $genderRepository,
     ) {
@@ -26,10 +26,10 @@ class GenderController extends Controller {
             $responseData = GenderIndexResponseData::from([
                 "genders" => $genders
             ]);
-            return $this->apiResponse->http200($responseData);
+            return $this->jsonResponseService->http200($responseData);
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->apiResponse->http500();
+            return $this->jsonResponseService->http500();
         }
     }
 }

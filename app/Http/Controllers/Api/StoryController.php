@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Data\Story\ShowStoryResponseData;
 use App\Data\Story\StoreStoryResponseData;
 use App\Data\Story\StoryIndexResponseData;
 use App\Data\Story\StoryRequestData;
@@ -28,7 +29,7 @@ class StoryController extends Controller {
 
     public function indexByUserId(Request $request) {
         try {
-            $userId = $request->route("id");
+            $userId = $request->route("userId");
             $stories = $this->storyReporsitory->getAllByUser($userId, UserStatusEnum::NOT_LOGGED_IN);
             if (is_null($stories))
                 return $this->jsonResponseService->http404();
@@ -44,7 +45,7 @@ class StoryController extends Controller {
 
     public function indexByCategoryId(Request $request) {
         try {
-            $categoryId = $request->route("id");
+            $categoryId = $request->route("categoryId");
             $stories = $this->storyReporsitory->getAllByCategory($categoryId);
             if (is_null($stories))
                 return $this->jsonResponseService->http404();
@@ -90,9 +91,16 @@ class StoryController extends Controller {
     /**
      * Display the specified resource.
      */
-    public function show(string $id) {
+    public function show(Request $request) {
         try {
-
+            $id = (int)$request->route("id");
+            $story = $this->storyReporsitory->getById($id);
+            if(is_null($story))
+                return $this->jsonResponseService->http404();
+            $responseData = ShowStoryResponseData::from([
+                "story" => $story
+            ]);
+            return $this->jsonResponseService->http200($responseData);
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
             return $this->jsonResponseService->http500();
