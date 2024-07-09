@@ -15,7 +15,7 @@ class UserStateSeeder extends Seeder {
             'name' => 'Activo',
         ]);
         UserState::create([
-            'name' => 'Inactivo',
+            'name' => 'Eliminado',
         ]);
         UserState::create([
             'name' => 'Suspendido',

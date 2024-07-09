@@ -14,30 +14,31 @@ class ImageManageService {
 
     }
 
-    public function store(UploadedFile $image, ImageTypeEnum $imageType): string|null {
-        try {
-            $imageName = $image->hashName();
-            if (!$image->storeAs(
-                'images/' . $imageType->value,
-                $imageName,
-                'public'
-            ))
-                return null;
-        } catch (\Exception $e) {
-            $this->logger->exception(__METHOD__, __LINE__, $e);
-            return null;
-        }
-        /*if (!Storage::disk('public')->put('images/' . $imageType->value . '/' . $imageName, $image));
-            return null;*/
-        return $imageName;
+    /**
+     * @param UploadedFile $image
+     * @param ImageTypeEnum $imageType
+     * @return false|string
+     * @throws \Exception
+     */
+    public function store(UploadedFile $image, ImageTypeEnum $imageType) {
+        // images/stories/file_name.jpg
+        $pathWithImageName = $image->store("images/" . $imageType->value, "public");
+        if($pathWithImageName == false)
+            throw new \Exception("Error when storing a new image");
+        $pathArray = explode('/', $pathWithImageName);
+        return end($pathArray);
     }
 
+    /**
+     * @param string $imageName
+     * @param ImageTypeEnum $imageType
+     * @return true
+     * @throws \Exception
+     */
     public function delete(string $imageName, ImageTypeEnum $imageType) {
-        try {
-            Storage::disk('public')->delete('images/' . $imageType->value . '/' . $imageName);
-        } catch(\Exception $e) {
-            $this->logger->exception(__METHOD__, __LINE__, $e);
-            return null;
-        }
+        $result = Storage::disk('public')->delete('images/' . $imageType->value . '/' . $imageName);
+        if($result === false)
+            throw new \Exception("Error when deleting an image with name: " . $imageName);
+        return true;
     }
 }

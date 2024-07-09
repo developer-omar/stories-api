@@ -18,7 +18,6 @@ class StoryRequestData extends Data
         public int $story_status,
         public int $category,
         public int $audience_type,
-        public int $copyright_type,
-        public ?int $author // ? the attribute can be int and null
+        public int $copyright_type
     ) {}
 }

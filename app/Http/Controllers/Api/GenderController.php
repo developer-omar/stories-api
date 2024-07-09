@@ -21,15 +21,10 @@ class GenderController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        try {
-            $genders = $this->genderRepository->getAll();
-            $responseData = GenderIndexResponseData::from([
-                "genders" => $genders
-            ]);
-            return $this->jsonResponseService->http200($responseData);
-        } catch (\Exception $e) {
-            $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->jsonResponseService->http500();
-        }
+        $genders = $this->genderRepository->getAll();
+        $responseData = GenderIndexResponseData::from([
+            "genders" => $genders
+        ]);
+        return $this->jsonResponseService->success(200, $responseData);
     }
 }

@@ -23,7 +23,7 @@ class AudienceTypeController extends Controller {
             $responseData = AudienceTypeIndexResponseData::from([
                 "audience_types" => $audienceTypes->toArray()
             ]);
-            return $this->jsonResponseService->http200($responseData);
+            return $this->jsonResponseService->success(200, $responseData);
         } catch (\Exception $e) {
             $this->logger->exception(__METHOD__, __LINE__, $e);
             return $this->jsonResponseService->http500();

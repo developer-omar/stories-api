@@ -18,15 +18,10 @@ class CopyrightTypeController extends Controller {
     }
 
     public function index() {
-        try {
-            $copyrightTypes = $this->copyrightTypeRepository->getAll();
-            $responseData = CopyrightTypeIndexResponseData::from([
-                "copyright_types" => $copyrightTypes->toArray()
-            ]);
-            return $this->jsonResponseService->http200($responseData);
-        } catch (\Exception $e) {
-            $this->logger->exception(__METHOD__, __LINE__, $e);
-            return $this->jsonResponseService->http500();
-        }
+        $copyrightTypes = $this->copyrightTypeRepository->getAll();
+        $responseData = CopyrightTypeIndexResponseData::from([
+            "copyright_types" => $copyrightTypes->toArray()
+        ]);
+        return $this->jsonResponseService->success(200, $responseData);
     }
 }

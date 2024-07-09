@@ -4,6 +4,36 @@ namespace App\Services;
 use App\Enums\ResponseStatusEnum;
 
 class JsonResponseService {
+    public function success(int $status, $data = null) {
+        return response()->json(
+            [
+                "status" => "success",
+                "data" => $data
+            ],
+            $status
+        );
+    }
+
+    public function fail(int $status, $data = null) {
+        return response()->json(
+            [
+                "status" => "fail",
+                "data" => $data
+            ],
+            $status
+        );
+    }
+
+    public function error(int $status, string $message = null) {
+        return response()->json(
+            [
+                "status" => "error",
+                "message" => $message
+            ],
+            $status
+        );
+    }
+
     /**
      * 200 OK
      * Respuesta estándar para peticiones correctas.

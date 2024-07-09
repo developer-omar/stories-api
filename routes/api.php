@@ -106,6 +106,11 @@ Route::middleware(['api', 'jwt.auth'])->group(function () {
     });
 
     Route::prefix("stories")->group(function () {
+        Route::get(
+            "",
+            [\App\Http\Controllers\Api\StoryController::class, "index"]
+        )->name("story.index");
+
         Route::post(
             "",
             [\App\Http\Controllers\Api\StoryController::class, "store"]

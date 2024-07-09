@@ -22,9 +22,9 @@ class CategoryController extends Controller {
 
     public function index(Request $request) {
         $categories = $this->categoryRepository->getAll();
-        $response = CategoryIndexResponseData::from([
+        $responseData = CategoryIndexResponseData::from([
             "categories" => $categories
         ]);
-        return $this->jsonResponseService->http200($response);
+        return $this->jsonResponseService->success(200, $responseData);
     }
 }

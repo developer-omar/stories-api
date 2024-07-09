@@ -12,7 +12,7 @@ use Illuminate\Validation\Rules\File;
 class StoryRequest extends FormRequest {
 
     public function __construct(
-        protected JsonResponseService $apiResponse,
+        protected JsonResponseService $jsonResponseService,
     ) {
         //
     }
@@ -77,7 +77,7 @@ class StoryRequest extends FormRequest {
 
     protected function failedValidation(Validator $validator) {
         throw new HttpResponseException(
-            $this->apiResponse->http422($validator->errors())
+            $this->jsonResponseService->http422($validator->errors())
         );
     }
 }
