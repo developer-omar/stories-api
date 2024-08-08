@@ -37,4 +37,10 @@ chmod -R 777 images/stories
 mkdir -p images/users
 chmod -R 777 images/users
 ```
-
+7. (Optional) if there are problems with cache, sessions and views you should use the next commands:
+```
+cd /var/www/stories-api/storage/framework
+chmod -R 777 cache
+chmod -R 777 sessions
+chmod -R 777 views
+```
